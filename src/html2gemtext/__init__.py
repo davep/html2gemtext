@@ -17,10 +17,11 @@ __licence__ = "MIT"
 ##############################################################################
 # Local imports.
 from .convert import html_to_gemtext
+from .options import Options
 
 ##############################################################################
 # Exports.
-__all__ = ["html_to_gemtext"]
+__all__ = ["html_to_gemtext", "Options"]
 
 
 ### __init__.py ends here

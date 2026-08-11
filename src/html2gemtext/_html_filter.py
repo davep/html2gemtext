@@ -6,13 +6,23 @@ from html.parser import HTMLParser
 from re import sub
 from typing import Final, Self
 
+##############################################################################
+# Local imports.
+from .options import Options
+
 
 ##############################################################################
 class ContentCapture:
     """A simple class to capture content."""
 
-    def __init__(self) -> None:
-        """Initialise the object."""
+    def __init__(self, options: Options) -> None:
+        """Initialise the object.
+
+        Args:
+            options: The options for the converter.
+        """
+        self._options = options
+        """The options for the converter."""
         self._content: list[str] = []
         """List that holds the captured content."""
 
@@ -41,13 +51,14 @@ class ContentCapture:
 class SoloLink(ContentCapture):
     """A simple class to capture a solo link."""
 
-    def __init__(self, link: str) -> None:
+    def __init__(self, link: str, options: Options) -> None:
         """Initialise the object.
 
         Args:
             link: The link to add.
+            options: The options for the converter.
         """
-        super().__init__()
+        super().__init__(options)
         self._link = link
         """The link to add."""
 
@@ -60,13 +71,14 @@ class SoloLink(ContentCapture):
 class Heading(ContentCapture):
     """A simple class to capture a heading."""
 
-    def __init__(self, level: int) -> None:
+    def __init__(self, level: int, options: Options) -> None:
         """Initialise the object.
 
         Args:
             level: The level of the heading.
+            options: The options for the converter.
         """
-        super().__init__()
+        super().__init__(options)
         self._level = min(level, 3)
         """The level of the heading."""
 
@@ -79,10 +91,6 @@ class Heading(ContentCapture):
 class ListItem(ContentCapture):
     """A simple class to capture a list item."""
 
-    def __init__(self) -> None:
-        """Initialise the object."""
-        super().__init__()
-
     def __str__(self) -> str:
         """Return the list item as a string."""
         return f"* {super().__str__()}"
@@ -91,10 +99,6 @@ class ListItem(ContentCapture):
 ##############################################################################
 class Quote(ContentCapture):
     """A simple class to capture a quote."""
-
-    def __init__(self) -> None:
-        """Initialise the object."""
-        super().__init__()
 
     def __str__(self) -> str:
         """Return the quote as a string."""
@@ -105,14 +109,14 @@ class Quote(ContentCapture):
 class Paragraph(ContentCapture):
     """A simple class to capture a paragraph."""
 
-    def __init__(self, final_newline: bool = True) -> None:
+    def __init__(self, options: Options) -> None:
         """Initialise the object.
 
         Args:
             final_newline: Whether to add a final newline to the paragraph.
         """
-        super().__init__()
-        self._final_newline = final_newline
+        super().__init__(options)
+        self._final_newline = options.space_after_paragraphs
         """Whether to add a final newline to the paragraph."""
         self._links: list[str] = []
         """List that holds the links in the paragraph."""
@@ -195,9 +199,11 @@ class Preformatted(Paragraph):
 class HTMLToGemtextFilter(HTMLParser):
     """A simple HTML to Gemtext converter."""
 
-    def __init__(self) -> None:
+    def __init__(self, options: Options | None = None) -> None:
         """Initialise the object."""
         super().__init__()
+        self._options = options or Options()
+        """The options for the converter."""
         self._current_capture: ContentCapture | None = None
         """The current content capture object."""
         self._document: list[ContentCapture] = []
@@ -232,40 +238,42 @@ class HTMLToGemtextFilter(HTMLParser):
             # A link outwith a paragraph.
             case "a" if self._current_capture is None:
                 if href := dict(attrs).get("href"):
-                    self._current_capture = SoloLink(href)
+                    self._current_capture = SoloLink(href, self._options)
 
             # A quote while there is no current capture.
             case "blockquote" if self._current_capture is None:
-                self._maybe_end_last_capture()._current_capture = Quote()
+                self._maybe_end_last_capture()._current_capture = Quote(self._options)
 
             # A break within a blockquote.
             case "br" if isinstance(self._current_capture, Quote):
                 self._document.append(self._current_capture)
-                self._current_capture = Quote()
+                self._current_capture = Quote(self._options)
 
             # A break within a paragraph.
             case "br" if isinstance(self._current_capture, Paragraph):
                 self._document.append(self._current_capture.cancel_final_newline())
-                self._current_capture = Paragraph()
+                self._current_capture = Paragraph(self._options)
 
             # A heading while there is no current capture.
             case "h1" | "h2" | "h3" | "h4" | "h5" | "h6":
                 self._maybe_end_last_capture()._current_capture = Heading(
-                    int(tag.removeprefix("h"))
+                    int(tag.removeprefix("h")), self._options
                 )
 
             # Any kind of list item.
             case "li":
-                self._maybe_end_last_capture()._current_capture = ListItem()
+                self._maybe_end_last_capture()._current_capture = ListItem(
+                    self._options
+                )
 
             # A paragraph while there is no current capture.
             case "p" if self._current_capture is None:
-                self._current_capture = Paragraph()
+                self._current_capture = Paragraph(self._options)
 
             # A paragraph within a paragraph.
             case "p" if isinstance(self._current_capture, Paragraph):
                 self._document.append(self._current_capture)
-                self._current_capture = Paragraph()
+                self._current_capture = Paragraph(self._options)
 
             # A paragraph within something else.
             case "p" if self._current_capture is not None:
@@ -273,7 +281,9 @@ class HTMLToGemtextFilter(HTMLParser):
 
             # A pre tag not inside anything else.
             case "pre" if self._current_capture is None:
-                self._maybe_end_last_capture()._current_capture = Preformatted()
+                self._maybe_end_last_capture()._current_capture = Preformatted(
+                    self._options
+                )
 
             # A pre tag inside something else.
             case "pre" if self._current_capture is not None:

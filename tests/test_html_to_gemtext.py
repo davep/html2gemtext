@@ -6,7 +6,7 @@ from pytest import mark
 
 ##############################################################################
 # Local imports.
-from html2gemtext import html_to_gemtext
+from html2gemtext import Options, html_to_gemtext
 
 
 ##############################################################################
@@ -46,6 +46,21 @@ def test_basic_conversion(html: str, gemtext: str) -> None:
         gemtext: The expected Gemtext output.
     """
     assert html_to_gemtext(html) == gemtext
+
+
+##############################################################################
+@mark.parametrize(
+    "html, space, gemtext",
+    [
+        ("<p>Hello, world!</p>", True, "Hello, world!\n"),
+        ("<p>Hello, world!</p>", False, "Hello, world!"),
+        ("<p>Hello, world!<p>Again!</p>", True, "Hello, world!\n\nAgain!\n"),
+        ("<p>Hello, world!<p>Again!</p>", False, "Hello, world!\nAgain!"),
+    ],
+)
+def test_paragraph_space_option(html: str, space: bool, gemtext: str) -> None:
+    """Test the paragraph space option."""
+    assert html_to_gemtext(html, Options(space_after_paragraphs=space)) == gemtext
 
 
 ### test_html_to_gemtext.py ends here
