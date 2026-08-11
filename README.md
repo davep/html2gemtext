@@ -67,8 +67,7 @@ either via the Python `-m` switch, or depending on your environment, via the
 
 The `html2gemtext` command (or `python -m html2gemtext`) would produce:
 
-```sh
-$ html2gemtext test.html
+```gemtext
 Hello World! This is a test of the converter.
 
 This is a link[1] to an external website.
