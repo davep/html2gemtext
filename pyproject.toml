@@ -1,6 +1,6 @@
 [project]
 name = "html2gemtext"
-version = "0.0.1"
+version = "0.1.0"
 description = "A simple library for converting HTML to Gemtext"
 readme = "README.md"
 authors = [
@@ -22,7 +22,7 @@ keywords = [
     "smolweb",
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3",
@@ -30,6 +30,11 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries",
+    "Topic :: Text Processing :: Filters",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Text Processing :: Markup",
+    "Topic :: Text Processing",
+    "Topic :: Utilities",
     "Typing :: Typed",
 ]
 
