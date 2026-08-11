@@ -1,8 +1,8 @@
 # html2gemtext ChangeLog
 
-## Unreleased
+## v0.1.0
 
-**Released: WiP**
+**Released: 2026-08-11**
 
 - Added an optional `Options` parameter for passing in options for
   configuring the output.
