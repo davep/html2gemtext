@@ -32,7 +32,7 @@ A very minimal converter might look like:
 
 ```python
 import fileinput
-from .convert import html_to_gemtext
+from html2gemtext import html_to_gemtext
 
 def convert() -> None:
     with fileinput.input() as html:
