@@ -1,5 +1,13 @@
 # html2gemtext ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added an optional `Options` parameter for passing in options for
+  configuring the output.
+  ([#1](https://github.com/davep/html2gemtext/pull/1))
+
 ## v0.0.1
 
 **Released: 2026-08-11**
