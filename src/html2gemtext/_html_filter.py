@@ -289,18 +289,20 @@ class HTMLToGemtextFilter(HTMLParser):
             case "pre" if self._current_capture is not None:
                 self._ignore_next.append(tag)
 
-    _END_TAGS_TO_HANDLE: Final[set[str]] = {
-        "blockquote",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "li",
-        "p",
-        "pre",
-    }
+    _END_TAGS_TO_HANDLE: Final[frozenset[str]] = frozenset(
+        {
+            "blockquote",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "li",
+            "p",
+            "pre",
+        }
+    )
     """The tags to handle the end of."""
 
     def handle_endtag(self, tag: str) -> None:
