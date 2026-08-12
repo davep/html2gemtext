@@ -311,7 +311,7 @@ class HTMLToGemtextFilter(HTMLParser):
         Args:
             tag: The name of the tag.
         """
-        if self._current_capture and tag in self._END_TAGS_TO_HANDLE:
+        if self._current_capture is not None and tag in self._END_TAGS_TO_HANDLE:
             if self._ignore_next and self._ignore_next[-1] == tag:
                 self._ignore_next.pop()
                 return
