@@ -42,10 +42,6 @@ class ContentCapture:
         """Return the captured content as a string."""
         return " ".join(self._content)
 
-    def __bool__(self) -> bool:
-        """Return whether the captured content is non-empty."""
-        return bool(self._content)
-
 
 ##############################################################################
 class SoloLink(ContentCapture):
