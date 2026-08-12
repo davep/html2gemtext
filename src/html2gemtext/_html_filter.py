@@ -42,10 +42,6 @@ class ContentCapture:
         """Return the captured content as a string."""
         return " ".join(self._content)
 
-    def __bool__(self) -> bool:
-        """Return whether the captured content is non-empty."""
-        return bool(self._content)
-
 
 ##############################################################################
 class SoloLink(ContentCapture):
@@ -289,18 +285,20 @@ class HTMLToGemtextFilter(HTMLParser):
             case "pre" if self._current_capture is not None:
                 self._ignore_next.append(tag)
 
-    _END_TAGS_TO_HANDLE: Final[set[str]] = {
-        "blockquote",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "li",
-        "p",
-        "pre",
-    }
+    _END_TAGS_TO_HANDLE: Final[frozenset[str]] = frozenset(
+        {
+            "blockquote",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "li",
+            "p",
+            "pre",
+        }
+    )
     """The tags to handle the end of."""
 
     def handle_endtag(self, tag: str) -> None:
@@ -309,7 +307,7 @@ class HTMLToGemtextFilter(HTMLParser):
         Args:
             tag: The name of the tag.
         """
-        if self._current_capture and tag in self._END_TAGS_TO_HANDLE:
+        if self._current_capture is not None and tag in self._END_TAGS_TO_HANDLE:
             if self._ignore_next and self._ignore_next[-1] == tag:
                 self._ignore_next.pop()
                 return
