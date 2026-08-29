@@ -625,7 +625,7 @@ convert, and the result is a string that is the resulting Gemtext.</p>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">with</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">()</span> <span class="k">as</span> <span class="n">html</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">html_to_gemtext</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">html</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">html_to_gemtext</span><span class="p">(</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">html</span><span class="p">)))</span>
 </code></pre></div>
 <p>While it is primarily intended as a library to be used from other Python
 code, it does contain a simple test command line tool, which can be accessed
@@ -633,7 +633,7 @@ either via the Python <code>-m</code> switch, or depending on your environment, 
 <code>html2gemtext</code> command. For example, given this content of a file called
 <code>test.html</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="cp">&lt;!doctype html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">"en"</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Test page<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
   <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
@@ -643,7 +643,7 @@ either via the Python <code>-m</code> switch, or depending on your environment, 
       Hello World! This is a test of the converter.
     <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://www.example.com&quot;</span><span class="p">&gt;</span>This is a link<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> to an external website.
+      <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"https://www.example.com"</span><span class="p">&gt;</span>This is a link<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> to an external website.
     <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
   <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
